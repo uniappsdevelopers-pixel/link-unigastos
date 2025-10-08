@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniGastos – Abrindo App</title>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1) Tenta pegar ?code=...
+      const params = new URLSearchParams(window.location.search);
+      let salaId = params.get('code');
+
+      // 2) Se não tiver ?code, pega último segmento da URL
+      if (!salaId) {
+        const parts = window.location.pathname
+          .split('/')
+          .filter(Boolean);  // remove strings vazias
+        salaId = parts.pop();
+      }
+
+      // 3) Se encontrou ID, tenta abrir o app
+      if (salaId) {
+        const deepLink = `myapp://rooms/${salaId}`;
+        window.location.href = deepLink;
+
+        // Atualiza link manual
+        const a = document.getElementById('open-link');
+        a.href = deepLink;
+      } else {
+        // Se não veio salaId, vai direto pro fallback
+        window.location.href = '/app-fallback.html';
+      }
+    });
+  </script>
+</head>
+<body>
+  <h1>UniGastos</h1>
+  <p>Estamos abrindo o app na sala…</p>
+  <p>
+    Caso nada aconteça, <a id="open-link" href="#">clique aqui</a>.
+  </p>
+</body>
+</html>
